@@ -1,0 +1,8 @@
+
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "sqlite" ; url = env("DATABASE_URL") }
+
+model User { id String @id @default(uuid()); name String?; email String @unique; password String; role String @default("user"); createdAt DateTime @default(now()) }
+model Merchant { id String @id @default(uuid()); name String; email String @unique; approved Boolean @default(false); createdAt DateTime @default(now()); products Product[] }
+model Product { id String @id @default(uuid()); name String; description String?; price Float; stock Int; image String; merchant Merchant? @relation(fields:[merchantId], references:[id]); merchantId String?; createdAt DateTime @default(now()) }
+model Order { id String @id @default(uuid()); userId String; productId String; quantity Int; total Float; status String @default("pending"); paymentTx String?; createdAt DateTime @default(now()) }
